@@ -1,0 +1,20 @@
+<div class="hero-section">
+    <div class="container text-center">
+        <% if (title) { %>
+            <h1 class="display-4 hero-title"><%= title %></h1>
+        <% } %>
+        <% if (subtitle) { %>
+            <p class="hero-subtitle"><%= subtitle %></p>
+        <% } %>
+        <% if (description) { %>
+            <p class="hero-description"><%= description %></p>
+        <% } %>
+        <% if (currentUser && currentUser.isAdmin) { %>
+            <div class="admin-controls mt-4">
+                <a href="/plants/new" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Add New Plant
+                </a>
+            </div>
+        <% } %>
+    </div>
+</div>

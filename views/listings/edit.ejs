@@ -1,0 +1,51 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow p-4 my-5">
+                <h1 class="text-center mb-4">Edit Plant</h1>
+                <form method="post" action="/plants/<%=listing._id%>?_method=PUT">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Plant Name</label>
+                        <input id="name" name="listing[name]" type="text" value="<%=listing.name%>" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="imageUrl" class="form-label">Image URL</label>
+                        <input id="imageUrl" name="listing[imageUrl]" type="text" value="<%=listing.imageUrl%>" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <input id="category" name="listing[category]" type="text" value="<%=listing.category%>" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea 
+                            id="description" 
+                            name="listing[description]" 
+                            class="form-control" 
+                            rows="3" 
+                            required
+                        ><%=listing.description%></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input id="price" name="listing[price]" type="number" value="<%=listing.price%>" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input id="quantity" name="listing[quantity]" type="number" value="<%=listing.quantity%>" class="form-control" required>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">Update Plant</button>
+                        <a href="/plants" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

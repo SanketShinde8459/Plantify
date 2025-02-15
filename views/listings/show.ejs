@@ -1,0 +1,72 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <img src="<%=Plants.imageUrl%>" class="card-img-top img-fluid" alt="Plant" style="height: 300px; object-fit: cover;">
+                <div class="card-body">
+                    <h2 class="card-title mb-3"><%=Plants.name%></h2>
+                    <h3 class="text-muted mb-3">&#8377;<%=Plants.price%></h3>
+                    <h4 class="mb-3"><%=Plants.category%> Plant</h4>
+                    <p class="card-text"><%=Plants.description%></p>
+                    <p class="card-text"><small class="text-muted">Stock: <%=Plants.quantity%></small></p>
+                    
+                    <div class="d-flex gap-2">
+                        <% if(currentUser && currentUser.isAdmin) { %>
+                            <a href="/plants/<%=Plants.id%>/edit" class="btn btn-info">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <form method="post" action="/plants/<%=Plants.id%>?_method=DELETE" 
+                                  onsubmit="return confirm('Are you sure you want to delete this plant?');">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        <% } %>
+                        
+                        <% if(currentUser && !currentUser.isAdmin) { %>
+                            <form method="post" action="/cart/<%=Plants.id%>">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+
+                    <% if(currentUser && currentUser.isAdmin) { %>
+                        <div class="quantity-management mt-3">
+                            <h5>Manage Stock</h5>
+                            <div class="d-flex align-items-center gap-3">
+                                <form action="/plants/<%=Plants.id%>/quantity?_method=PATCH" method="POST" class="d-flex align-items-center">
+                                    <input type="hidden" name="_method" value="PATCH">
+                                    <div class="input-group" style="width: 150px;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity()">-</button>
+                                        <input type="number" class="form-control text-center" id="quantityChange" name="quantityChange" value="1" min="1">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity()">+</button>
+                                    </div>
+                                    <button type="submit" name="action" value="add" class="btn btn-success ms-2">Add Stock</button>
+                                    <button type="submit" name="action" value="remove" class="btn btn-warning ms-2">Remove Stock</button>
+                                </form>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function incrementQuantity() {
+    const input = document.getElementById('quantityChange');
+    input.value = parseInt(input.value) + 1;
+}
+
+function decrementQuantity() {
+    const input = document.getElementById('quantityChange');
+    if (parseInt(input.value) > 1) {
+        input.value = parseInt(input.value) - 1;
+    }
+}
+</script>

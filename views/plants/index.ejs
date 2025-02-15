@@ -1,0 +1,48 @@
+<div class="container">
+    <% if(currentUser && currentUser.isAdmin) { %>
+        <div class="admin-controls mb-4">
+            <a href="/plants/new" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add New Plant
+            </a>
+        </div>
+    <% } %>
+
+    <div class="row">
+        <% plants.forEach(plant => { %>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <img src="<%= plant.image %>" class="card-img-top" alt="<%= plant.name %>">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= plant.name %></h5>
+                        <p class="card-text">₹<%= plant.price %></p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="/plants/<%= plant._id %>" class="btn btn-primary">View Details</a>
+                            
+                            <% if(currentUser && currentUser.isAdmin) { %>
+                                <div class="admin-actions">
+                                    <a href="/plants/<%= plant._id %>/edit" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form class="d-inline" action="/plants/<%= plant._id %>?_method=DELETE" method="POST"
+                                        onsubmit="return confirm('Are you sure you want to delete this plant?');">
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<style>
+.admin-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+</style>

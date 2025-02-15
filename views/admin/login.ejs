@@ -1,0 +1,41 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Admin Login</h2>
+                    <form action="/admin/login" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required autofocus>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login as Admin</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const togglePassword = document.querySelector('#togglePassword');
+const password = document.querySelector('#password');
+
+togglePassword.addEventListener('click', function (e) {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.querySelector('i').classList.toggle('fa-eye');
+    this.querySelector('i').classList.toggle('fa-eye-slash');
+});
+</script>

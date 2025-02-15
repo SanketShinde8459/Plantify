@@ -1,0 +1,31 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Edit Profile</h2>
+                    <form action="/users/edit-profile?_method=PUT" method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobno" class="form-label">Mobile Number</label>
+                            <input type="tel" class="form-control" id="mobno" name="mobno" value="<%= user.mobno %>" required>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="/users/profile" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
