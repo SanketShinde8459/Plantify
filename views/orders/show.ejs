@@ -1,0 +1,106 @@
+<% layout('layouts/boilerplate')%>
+<!-- Single order -->
+<div class="container mt-5" style="min-height: calc(100vh - 150px); margin-bottom: 80px;">
+    <p>show.ejs</p>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Order #<%= order._id %></h4>
+                    <p class="card-text">
+                        <strong>Status:</strong> 
+                        <span class="badge bg-<%= order.status === 'placed' ? 'warning' : 
+                                                order.status === 'completed' ? 'success' : 
+                                                order.status === 'cancelled' ? 'danger' : 'info' %>">
+                            <%= order.status.toUpperCase() %>
+                        </span>
+                    </p>
+
+                    <!-- Show cancel button only if order is in 'placed' status -->
+                    <% if (order.status === 'placed' && currentUser && !currentUser.isAdmin) { %>
+                        <button type="button" class="btn btn-danger" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#cancelOrderModal">
+                            Cancel Order
+                        </button>
+
+                        <!-- Cancel Order Modal -->
+                        <div class="modal fade" id="cancelOrderModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Cancel Order</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <form action="/orders/<%= order._id %>/cancel" method="POST">
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="reason" class="form-label">Reason for Cancellation</label>
+                                                <textarea class="form-control" id="reason" name="reason" 
+                                                        rows="3" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" 
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Order Details</h3>
+                    <p class="mb-2">Status: 
+                        <span class="badge bg-<%= order?.status === 'Pending' ? 'warning' : 'success' %>">
+                            <%= order?.status || 'Processing' %>
+                        </span>
+                    </p>
+                    <p class="mb-2">Order Date: <%= order?.createdAt?.toLocaleDateString() || 'Date not available' %></p>
+                    <p class="mb-0">Total Amount: ₹<%= order?.totalAmount || 0 %></p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Order Items</h4>
+                    <% if(order?.items && order.items.length > 0) { %>
+                        <% order.items.forEach(item => { %>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h6 class="mb-0"><%= item?.plant?.name || 'Item Name Not Available' %></h6>
+                                    <small class="text-muted">Quantity: <%= item?.quantity || 1 %></small>
+                                </div>
+                                <span>₹<%= (item?.price || 0) * (item?.quantity || 1) %></span>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-muted">No items in this order</p>
+                    <% } %>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Total:</h5>
+                        <h5 class="mb-0">₹<%= order?.totalAmount || 0 %></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Actions</h4>
+                    <div class="d-grid gap-2">
+                        <a href="/orders/<%= order._id %>/bill" class="btn btn-info">View Bill</a>
+                        <a href="/orders" class="btn btn-outline-secondary">Back to Orders</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

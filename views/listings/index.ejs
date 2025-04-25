@@ -1,0 +1,25 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5 mb-5 pb-5">
+    <h3 class="mb-4">All Plants</h3>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
+        <% for (let Plant of allPlant) { %>
+            <div class="col mb-4">
+                <a href="/plants/<%= Plant.id %>" class="text-decoration-none text-dark">
+                    <div class="card h-100 shadow-sm">
+                        <img
+                            src="<%= Plant.imageUrl.url %>"
+                            class="card-img-top"
+                            alt="<%= Plant.name %>"
+                            style="height: 20rem; object-fit: cover;"
+                        />
+                        <div class="card-body">
+                            <h5 class="card-title"><%= Plant.name %></h5>
+                            <p class="card-text mb-0">&#8377;<%= Plant.price %></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <% } %>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container">
+      <a class="navbar-brand" href="/plants">Plants Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar-Nav">
+          <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="/plants">All Plants</a>
+              </li>
+              <div class="navbar-nav ms-auto">
+
+                <% if(currentUser) { %>
+                    <% if(currentUser.isAdmin) { %>
+                        <li class="nav-item">
+                            <span class="nav-link">
+                                <i class="fas fa-user-shield"></i> Admin: <%= currentUser.username %>
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/logout">Logout</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/profile">Profile</a>
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <span class="nav-link">
+                                <i class="fas fa-user"></i> <%= currentUser.username %>
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/cart">
+                                <i class="fas fa-shopping-cart"></i> Cart
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/orders">
+                                <i class="fas fa-box"></i> Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/logout">Logout</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/profile">Profile</a>
+                        </li>
+                    <% } %>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/register">Sign up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/login">User Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/login">Admin Login</a>
+                    </li>
+                <% } %>
+            </div>
+          </ul>
+      </div>
+  </div>
+</nav>

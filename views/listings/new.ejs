@@ -1,0 +1,116 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow p-4 my-5">
+                <h1 class="text-center mb-4">Add New Plant</h1>
+                <form method="POST" action="/plants/add" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Plant Name</label>
+                        <input id="name" 
+                               name="listing[name]" 
+                               type="text" 
+                               class="form-control" 
+                               pattern="^[A-Za-z\s]{2,30}$"
+                               title="Plant name must contain only letters and spaces (2-30 characters)"
+                               required>
+                        <div class="invalid-feedback">
+                            Plant name must contain only letters and spaces (2-30 characters)
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Upload Image</label>
+                        <input id="image" 
+                               name="listing[imageUrl]" 
+                               type="file" 
+                               class="form-control" 
+                               required>
+                        <div class="invalid-feedback">
+                            Please select an image file
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select id="category" 
+                                name="listing[category]" 
+                                class="form-control" 
+                                required>
+                            <option value="">Select Category</option>
+                            <option value="Fruit">Fruit</option>
+                            <option value="Medicinal">Medicinal</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an image file
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price (₹)</label>
+                        <input id="price" 
+                               name="listing[price]" 
+                               type="number" 
+                               class="form-control" 
+                               min="1" 
+                               required>
+                               <div class="invalid-feedback">
+                                Please enter price greater than 0
+                            </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input id="quantity" 
+                               name="listing[quantity]" 
+                               type="number" 
+                               class="form-control" 
+                               min="1" 
+                               required>
+                                 <div class="invalid-feedback">
+                                  Please enter quantity greater than 0
+                                  </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea id="description" 
+                                  name="listing[description]" 
+                                  class="form-control" 
+                                  rows="3" 
+                                  required>
+                                </textarea>
+                                  <div class="invalid-feedback">
+                                    Please enter description
+                                    </div>
+                               
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">Add Plant</button>
+                        <a href="/plants" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelector('form').addEventListener('submit', function(event) {
+    if (!this.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    this.classList.add('was-validated');
+});
+document.getElementById('name').addEventListener('input', function(e) {
+    const namePattern = /^[A-Za-z\s]{2,30}$/;
+    if (!namePattern.test(this.value)) {
+        this.setCustomValidity('Plant name must contain only letters and spaces');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>

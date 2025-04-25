@@ -1,0 +1,30 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="card-title">Admin Profile</h2>
+                        <span class="badge bg-danger">Admin</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Username:</strong> <%= admin.username %></p>
+                            <p><strong>Email:</strong> <%= admin.email %></p>
+                            <p><strong>Role:</strong> Administrator</p>
+                          
+                            <div class="col-md-4">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body">
+                                        <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

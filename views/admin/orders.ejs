@@ -1,0 +1,207 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mt-4">
+    <h2 class="mb-4">
+        <i class="fas fa-shopping-bag"></i> All Orders
+    </h2>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <% if(orders && orders.length > 0) { %>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.forEach(order => { %>
+                                <tr>
+                                    <td><%= order._id %></td>
+                                    <td><%= order.user.username %></td>
+                                    <td>
+                                        <% if (currentUser && !currentUser.isAdmin) { %>
+                                            <% if (order.status === 'placed') { %>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="badge bg-warning">Placed</span>
+                                                    <button class="btn btn-danger btn-sm" 
+                                                            onclick="showCancelModal('<%= order._id %>')"
+                                                            <%= order.status !== 'placed' ? 'disabled' : '' %>>
+                                                        Cancel Order
+                                                    </button>
+                                                </div>
+                                            <% } else if (order.status === 'cancelled') { %>
+                                                <span class="badge bg-danger">Cancelled</span>
+                                                <small class="d-block text-muted">
+                                                    Reason: <%= order.cancellationReason %>
+                                                </small>
+                                            <% } else if (order.status === 'completed') { %>
+                                                <span class="badge bg-success">Completed</span>
+                                            <% } %>
+                                        <% } else { %>
+                                            <!-- Admin view -->
+                                            <% if (order.status !== 'cancelled' && order.status !== 'completed') { %>
+                                                <select class="form-select form-select-sm" 
+                                                        onchange="updateOrderStatus('<%= order._id %>', this.value)">
+                                                    <option value="placed" 
+                                                            <%= order.status === 'placed' ? 'selected' : '' %>>Placed</option>
+                                                    <option value="completed" 
+                                                            <%= order.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                                                    <option value="cancelled" 
+                                                            <%= order.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                                </select>
+                                            <% } else { %>
+                                                <span class="badge bg-<%= order.status === 'completed' ? 'success' : 'danger' %>">
+                                                    <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                                                </span>
+                                                <% if (order.status === 'cancelled' && order.cancellationReason) { %>
+                                                    <small class="d-block text-muted">
+                                                        Reason: <%= order.cancellationReason %>
+                                                    </small>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
+                                    </td>
+                                    <td>₹<%= order.total || order.totalAmount %></td>
+                                    <td>
+                                        <a href="/orders/<%= order._id %>" class="btn btn-sm btn-info">View</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="text-center py-4">
+                    <i class="fas fa-box-open fa-3x mb-3 text-muted"></i>
+                    <p class="lead">No orders found</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<!-- Add Cancel Order Modal -->
+<div class="modal fade" id="cancelOrderModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="cancelOrderForm" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="cancellationReason" class="form-label">Reason for Cancellation</label>
+                        <textarea class="form-control" id="cancellationReason" 
+                                name="reason" rows="3" required 
+                                placeholder="Please provide a reason for cancellation"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+async function updateOrderStatus(orderId, status) {
+    try {
+        const response = await fetch(`/admin/orders/${orderId}/status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ status })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'Failed to update order status'));
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error updating order status. Please try again.');
+    }
+}
+
+function showCancelModal(orderId) {
+    const modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+    const form = document.getElementById('cancelOrderForm');
+    form.action = `/orders/${orderId}/cancel`;
+    modal.show();
+}
+</script>
+
+<style>
+.status-select {
+    min-width: 140px;
+    transition: all 0.3s ease;
+}
+
+.status-select:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+select.status-select option {
+    background-color: white;
+    color: black;
+}
+
+.badge {
+    font-size: 0.9em;
+    padding: 0.5em 1em;
+    text-transform: capitalize;
+}
+
+.disabled-select {
+    opacity: 0.8 !important;
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.status-select[disabled] {
+    opacity: 0.8 !important;
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.gap-2 {
+    gap: 0.5rem !important;
+}
+
+#cancelOrderModal textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+</style>

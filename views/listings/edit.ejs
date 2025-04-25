@@ -1,0 +1,70 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow p-4 my-5">
+                <h1 class="text-center mb-4">Edit Plant</h1>
+                <form method="post" action="/plants/<%=listing._id%>?_method=PUT">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Plant Name</label>
+                        <input id="name" name="listing[name]" type="text" value="<%=listing.name%>" class="form-control" 
+                        pattern="^[A-Za-z\s]{2,30}$"
+                        title="Plant name must contain only letters and spaces (2-30 characters)"
+                        required>
+                        <div class="invalid-feedback">
+                            Plant name must contain only letters and spaces (2-30 characters)
+                        </div>
+                    </div>
+
+                    <!-- <div class="mb-3">
+                        <label for="imageUrl" class="form-label">Upload Image</label>
+                        <input id="imageUrl" name="listing[imageUrl]" type="file"  class="form-control">
+                    </div> -->
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select id="category" name="listing[category]"  value="<%=listing.category%>" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="Fruit">Fruit</option>
+                            <option value="Medicinal">Medicinal</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an option
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea 
+                            id="description" 
+                            name="listing[description]" 
+                            class="form-control" 
+                            rows="3" 
+                            required
+                        ><%=listing.description%></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input id="price" name="listing[price]" min="1" type="number" value="<%=listing.price%>" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Please enter price greater than 0
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input id="quantity" name="listing[quantity]" type="number" min="1" value="<%=listing.quantity%>" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Please enter quantity greater than 0
+                            </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">Update Plant</button>
+                        <a href="/plants" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

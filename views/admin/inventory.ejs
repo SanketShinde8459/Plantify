@@ -1,0 +1,124 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h3 class="card-title mb-0">Inventory Management</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Plant Name</th>
+                            <th>Category</th>
+                            <th>Current Quantity</th>
+                            <th>Price (₹)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% plants.forEach(plant => { %>
+                            <tr>
+                                <td><%= plant.name %></td>
+                                <td><%= plant.category %></td>
+                                <td>
+                                    <span id="quantity-<%= plant._id %>"><%= plant.quantity %></span>
+                                </td>
+                                <td>₹<%= plant.price %></td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-outline-danger" 
+                                                onclick="updateQuantity('<%= plant._id %>', -1)">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input type="number" 
+                                               class="form-control form-control-sm mx-2" 
+                                               style="width: 70px;"
+                                               id="input-<%= plant._id %>"
+                                               value="1"
+                                               min="1">
+                                        <button class="btn btn-sm btn-outline-success" 
+                                                onclick="updateQuantity('<%= plant._id %>', 1)">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function updateQuantity(plantId, operation) {
+    const input = document.getElementById(`input-${plantId}`);
+    const amount = parseInt(input.value);
+    
+    if (isNaN(amount) || amount < 1) {
+        alert('Please enter a valid quantity');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/admin/inventory/${plantId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                operation: operation,
+                amount: amount
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Update the displayed quantity
+            const quantitySpan = document.getElementById(`quantity-${plantId}`);
+            quantitySpan.textContent = data.newQuantity;
+            
+            // Reset the input value
+            input.value = 1;
+            
+            // Show success message
+            showToast(data.message, 'success');
+        } else {
+            throw new Error(data.error);
+        }
+    } catch (err) {
+        showToast(err.message || 'Error updating quantity', 'error');
+    }
+}
+
+function showToast(message, type) {
+    // Add your toast notification code here
+    alert(message); // Temporary fallback
+}
+</script>
+
+<style>
+.table td {
+    vertical-align: middle;
+}
+
+.btn-group .form-control {
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .btn-group input {
+        margin: 5px 0;
+    }
+}
+</style>

@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterSection">
+            <i class="fas fa-filter"></i> Show Filters
+        </button>
+    </div>
+
+    <div class="collapse" id="filterSection">
+        <%- include('../includes/filters') %>
+    </div>
+    
+    <% if(currentUser && currentUser.isAdmin) { %>
+        <div class="admin-controls mb-4">
+            <a href="/plants/new" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add New Plant
+            </a>
+        </div>
+    <% } %>
+
+    <!-- Show active filters if any -->
+    <% if (query && (query.name || query.category || query.minPrice || query.maxPrice)) { %>
+        <div class="active-filters mb-3">
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <span class="text-muted">Active Filters:</span>
+                <% if (query.name) { %>
+                    <span class="badge bg-primary">Name: <%= query.name %></span>
+                <% } %>
+                <% if (query.category) { %>
+                    <span class="badge bg-primary">Category: <%= query.category %></span>
+                <% } %>
+                <% if (query.minPrice || query.maxPrice) { %>
+                    <span class="badge bg-primary">
+                        Price: <%= query.minPrice || '0' %> - <%= query.maxPrice || '∞' %>
+                    </span>
+                <% } %>
+                <a href="/plants" class="btn btn-sm btn-outline-secondary">Clear All</a>
+            </div>
+        </div>
+    <% } %>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <% plants.forEach(plant => { %>
+</div>
+
+<style>
+.admin-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+</style>

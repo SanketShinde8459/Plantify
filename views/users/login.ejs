@@ -1,0 +1,47 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Login</h2>
+                    <form action="/users/login" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" 
+                                   id="username" 
+                                   name="username" 
+                                   class="form-control" 
+                                   required
+                                   autofocus>
+                            <div class="invalid-feedback">
+                                Please enter your username
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" 
+                                   id="password" 
+                                   name="password" 
+                                   class="form-control" 
+                                   required>
+                            <div class="invalid-feedback">
+                                Please enter your password
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Login</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="/users/register">Sign up</a></p>
+                    </div>
+                    <!-- <div class="text-center mt-3">
+                        <p>Forgot password? <a href="">Forgot Password</a></p>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
