@@ -7,7 +7,7 @@ require('dotenv').config();
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 const Plant = require("./models/plants.js");
 const wrapAsync = require("./utils/wrapAsync.js");
@@ -132,3 +132,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+// "C:\Program Files\MongoDB\Server\6.0\bin\mongod.exe" --dbpath="C:\data\db"
