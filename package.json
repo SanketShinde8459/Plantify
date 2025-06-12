@@ -13,5 +13,11 @@
     "multer-storage-cloudinary": "^4.0.0",
     "passport": "^0.7.0",
     "passport-local-mongoose": "^8.0.0"
+  },
+  "editorconfig": {
+    "root": true,
+    "end_of_line": "lf",
+    "insert_final_newline": true,
+    "trim_trailing_whitespace": true
   }
 }
